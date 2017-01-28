@@ -18,7 +18,7 @@ class BusinessCard extends JPanel {
 
     private static final int WINDOW_HEIGHT = 1000;
 
-    private static final String FONT_FAMILY = "sanserif";
+    private static final int BUSINESS_CARD_WIDTH = 350;
 
     private static final int FONT_SIZE = 16;
 
@@ -28,7 +28,11 @@ class BusinessCard extends JPanel {
 
     private static final int Y_OFFSET = 40;
 
-    private static final int BUSINESS_CARD_WIDTH = 350;
+    private static final String FONT_FAMILY = "sanserif";
+
+    private static final String IMAGE_RESOURCES = "/resources/images";
+
+    private static final String FONT_RESOURCES = "/resources/fonts";
 
     private HashMap<String, String> colorPallet = new HashMap<>();
 
@@ -78,7 +82,7 @@ class BusinessCard extends JPanel {
     private void drawHeader(final Graphics graphics) {
         BufferedImage background = getImageResource(
             graphics,
-            "/resources/images/headerBg.jpg"
+            IMAGE_RESOURCES + "/headerBg.jpg"
         );
 
         graphics.drawImage(
@@ -100,13 +104,19 @@ class BusinessCard extends JPanel {
     }
 
     private void drawBody(final Graphics graphics) {
-        int contactDetailsXOffset = X_OFFSET + 80;
-
-        int contactDetailsYOffset = Y_OFFSET + 250;
-
         graphics.setColor(getColorFromPallet("Highlight"));
 
         graphics.fillRect(X_OFFSET, Y_OFFSET + 210, BUSINESS_CARD_WIDTH, 400);
+
+        drawContactDetails(graphics);
+
+        drawContactIcons(graphics);
+    }
+
+    private void drawContactDetails(final Graphics graphics) {
+        final int contactDetailsXOffset = X_OFFSET + 80;
+
+        int contactDetailsYOffset = Y_OFFSET + 250;
 
         String[] contactDetails = {
             "benj@minapayne.com",
@@ -179,6 +189,24 @@ class BusinessCard extends JPanel {
         );
     }
 
+    private void drawContactIcons(final Graphics graphics) {
+        Font font = getFontResource(graphics, "fontawesome-webfont.ttf");
+
+        String[] contactIcons = {"\uf0e0", "\uf095", "\uf0ac", "\uf041"};
+
+        int contactIconOffset = Y_OFFSET + 255;
+
+        graphics.setColor(getColorFromPallet("Accent"));
+
+        graphics.setFont(font);
+
+        for (String contactIcon : contactIcons) {
+            graphics.drawString(contactIcon, X_OFFSET + 30, contactIconOffset);
+
+            contactIconOffset += 80;
+        }
+    }
+
     private void drawFooter(final Graphics graphics) {
         graphics.setColor(getColorFromPallet("Accent"));
 
@@ -199,6 +227,26 @@ class BusinessCard extends JPanel {
 
 
         return background;
+    }
+
+    private Font getFontResource(final Graphics graphics, final String path) {
+        Font font = null;
+
+        try {
+            font = Font.createFont(
+                Font.TRUETYPE_FONT,
+                getClass().
+                    getResourceAsStream(FONT_RESOURCES + "/" + path)
+            );
+
+            font = font.deriveFont(Font.PLAIN, 24f);
+        } catch (IOException | FontFormatException e) {
+            graphics.setColor(Color.WHITE);
+
+            graphics.drawString(e.getMessage(), 0, 0);
+        }
+
+        return font;
     }
 
     private void setColorPallet() {
