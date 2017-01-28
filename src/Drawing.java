@@ -13,7 +13,6 @@ import java.util.*;
  @version 2017-01-24
  *****************************************************************/
 class BusinessCard extends JPanel {
-
     private static final int WINDOW_WIDTH = 500;
 
     private static final int WINDOW_HEIGHT = 1000;
@@ -23,6 +22,8 @@ class BusinessCard extends JPanel {
     private static final int FONT_SIZE = 16;
 
     private static final int LARGE_FONT_SIZE = 20;
+
+    private static final int NEW_FONT_SIZE = 24;
 
     private static final int X_OFFSET = 75;
 
@@ -46,14 +47,13 @@ class BusinessCard extends JPanel {
         window.setVisible(true);
     }
 
+    @Override
     public void paintComponent(final Graphics graphics) {
         super.paintComponent(graphics);
 
         setColorPallet();
 
         setBackground(getColorFromPallet("Base"));
-
-        graphics.setColor(getColorFromPallet("Highlight"));
 
         drawBackground(graphics);
 
@@ -92,21 +92,36 @@ class BusinessCard extends JPanel {
             null
         );
 
+        final int headerTextXOffset = 20;
+
+        final int headerTextYOffset = Y_OFFSET + 150;
+
+        final int headerThirdTextYOffset = headerTextYOffset + 20;
+
         graphics.setColor(getColorFromPallet("Highlight"));
 
         graphics.setFont(new Font(FONT_FAMILY, Font.BOLD, LARGE_FONT_SIZE));
 
-        graphics.drawString("BEN PAYNE", X_OFFSET + 20, Y_OFFSET + 150);
+        graphics.drawString("BEN PAYNE", X_OFFSET + headerTextXOffset, headerTextYOffset);
 
-        graphics.setFont(new Font(FONT_FAMILY, Font.PLAIN, 20));
+        graphics.setFont(new Font(FONT_FAMILY, Font.PLAIN, LARGE_FONT_SIZE));
 
-        graphics.drawString("Web Developer", X_OFFSET + 20, Y_OFFSET + 170);
+        graphics.drawString("Web Developer", X_OFFSET + headerTextXOffset, headerThirdTextYOffset);
     }
 
     private void drawBody(final Graphics graphics) {
+        final int bodyHeight = 400;
+
+        final int bodyYOffset = Y_OFFSET + 210;
+
         graphics.setColor(getColorFromPallet("Highlight"));
 
-        graphics.fillRect(X_OFFSET, Y_OFFSET + 210, BUSINESS_CARD_WIDTH, 400);
+        graphics.fillRect(
+            X_OFFSET,
+            bodyYOffset,
+            BUSINESS_CARD_WIDTH,
+            bodyHeight
+        );
 
         drawContactDetails(graphics);
 
@@ -115,6 +130,10 @@ class BusinessCard extends JPanel {
 
     private void drawContactDetails(final Graphics graphics) {
         final int contactDetailsXOffset = X_OFFSET + 80;
+
+        final int contactDetailsYIncrement = 80;
+
+        final int quoteXOffset = 15;
 
         int contactDetailsYOffset = Y_OFFSET + 250;
 
@@ -131,9 +150,13 @@ class BusinessCard extends JPanel {
 
         for (String contactDetail : contactDetails) {
             if (contactDetail.contains("\n")) {
-                String[] splitDetails = contactDetail.split("\n");
-
                 int splitYOffset = 0;
+
+                final int splitYOffsetIncrement = 20;
+
+                final int yOffsetIncrement = 50;
+
+                String[] splitDetails = contactDetail.split("\n");
 
                 for (String splitDetail : splitDetails) {
 
@@ -145,18 +168,20 @@ class BusinessCard extends JPanel {
                         contactDetailsYOffset + splitYOffset
                     );
 
-                    splitYOffset += 20;
+                    splitYOffset += splitYOffsetIncrement;
                 }
 
                 graphics.setColor(getColorFromPallet("Light"));
 
                 graphics.drawLine(
                     X_OFFSET,
-                    contactDetailsYOffset + 50,
+                    contactDetailsYOffset + yOffsetIncrement,
                     X_OFFSET + BUSINESS_CARD_WIDTH,
-                    contactDetailsYOffset + 50
+                    contactDetailsYOffset + yOffsetIncrement
                 );
             } else {
+                final int yOffsetIncrement = 30;
+
                 graphics.setColor(getColorFromPallet("Text"));
 
                 graphics.drawString(
@@ -169,13 +194,13 @@ class BusinessCard extends JPanel {
 
                 graphics.drawLine(
                     X_OFFSET,
-                    contactDetailsYOffset + 30,
+                    contactDetailsYOffset + yOffsetIncrement,
                     X_OFFSET + BUSINESS_CARD_WIDTH,
-                    contactDetailsYOffset + 30
+                    contactDetailsYOffset + yOffsetIncrement
                 );
             }
 
-            contactDetailsYOffset += 80;
+            contactDetailsYOffset += contactDetailsYIncrement;
         }
 
         graphics.setColor(getColorFromPallet("Text"));
@@ -184,7 +209,7 @@ class BusinessCard extends JPanel {
 
         graphics.drawString(
             "\"ASCII stupid question, get a stupid ANSI\"",
-            X_OFFSET + 15,
+            X_OFFSET + quoteXOffset,
             contactDetailsYOffset + 5
         );
     }
@@ -194,6 +219,10 @@ class BusinessCard extends JPanel {
 
         String[] contactIcons = {"\uf0e0", "\uf095", "\uf0ac", "\uf041"};
 
+        final int contactIconXOffset = X_OFFSET + 30;
+
+        final int contactIconYOffsetIncrement = 80;
+
         int contactIconOffset = Y_OFFSET + 255;
 
         graphics.setColor(getColorFromPallet("Accent"));
@@ -201,16 +230,20 @@ class BusinessCard extends JPanel {
         graphics.setFont(font);
 
         for (String contactIcon : contactIcons) {
-            graphics.drawString(contactIcon, X_OFFSET + 30, contactIconOffset);
+            graphics.drawString(contactIcon, contactIconXOffset, contactIconOffset);
 
-            contactIconOffset += 80;
+            contactIconOffset += contactIconYOffsetIncrement;
         }
     }
 
     private void drawFooter(final Graphics graphics) {
+        final int footerYOffset = Y_OFFSET + 600;
+
+        final int footerHeight = 10;
+
         graphics.setColor(getColorFromPallet("Accent"));
 
-        graphics.fillRect(X_OFFSET, Y_OFFSET + 600, BUSINESS_CARD_WIDTH, 10);
+        graphics.fillRect(X_OFFSET, footerYOffset, BUSINESS_CARD_WIDTH, footerHeight);
     }
 
     private BufferedImage getImageResource(
@@ -222,7 +255,9 @@ class BusinessCard extends JPanel {
         try {
             background = ImageIO.read(getClass().getResource(path));
         } catch (IOException e) {
-            graphics.drawString(e.getMessage(), 100, 100);
+            graphics.setColor(Color.WHITE);
+
+            graphics.drawString(e.getMessage(), 0, 0);
         }
 
 
@@ -239,7 +274,7 @@ class BusinessCard extends JPanel {
                     getResourceAsStream(FONT_RESOURCES + "/" + path)
             );
 
-            font = font.deriveFont(Font.PLAIN, 24f);
+            font = font.deriveFont(Font.PLAIN, NEW_FONT_SIZE);
         } catch (IOException | FontFormatException e) {
             graphics.setColor(Color.WHITE);
 
