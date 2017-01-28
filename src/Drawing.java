@@ -138,7 +138,7 @@ class BusinessCard extends JPanel {
         int contactDetailsYOffset = Y_OFFSET + 250;
 
         String[] contactDetails = {
-            "benj@minapayne.com",
+            "benj@minpayne.com",
             "(616) 634-2033",
             "www.bj-payne.com",
             "1138 Orchard Ave SE\n Grand Rapids, MI 49506"
