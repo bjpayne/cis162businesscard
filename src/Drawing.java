@@ -92,12 +92,6 @@ class BusinessCard extends JPanel {
             IMAGE_RESOURCES + "/headerBg.jpg"
         );
 
-        BufferedImage profile = getImageResource(
-            graphics,
-            IMAGE_RESOURCES + "/profile.png"
-        );
-
-
         graphics.drawImage(
             background,
             X_OFFSET,
@@ -105,10 +99,21 @@ class BusinessCard extends JPanel {
             null
         );
 
+        drawProfile(graphics);
+
+        drawLogo(graphics);
+    }
+
+    private void drawProfile(final Graphics graphics) {
         final int headerProfileXOffset = X_OFFSET + 20;
         final int headerProfileYOffset = Y_OFFSET + 20;
         final int headerProfileWidth = 100;
         final int headerProfileHeight = 100;
+
+        BufferedImage profile = getImageResource(
+            graphics,
+            IMAGE_RESOURCES + "/profile.png"
+        );
 
         Image scaledProfile = profile.getScaledInstance(
             headerProfileWidth,
@@ -122,12 +127,93 @@ class BusinessCard extends JPanel {
             headerProfileYOffset,
             null
         );
+    }
 
-        final int headerTextXOffset = X_OFFSET + 20;
+    private void drawLogo(final Graphics graphics) {
+        final int logoXOffset = X_OFFSET + 20;
 
-        final int headerTextYOffset = Y_OFFSET + 150;
+        final int logoYOffset = Y_OFFSET + 135;
 
-        final int headerTextLowerThirdYOffset = headerTextYOffset + 20;
+        final int logoTextXOffset = logoXOffset + 60;
+
+        final int logoTextYOffset = Y_OFFSET + 150;
+
+        final int headerTextLowerThirdYOffset = logoTextYOffset + 20;
+
+        final int logoWidthHeight = 40;
+
+        final int logoRadius = 5;
+
+        final int logoRightBackgroundXOffset = logoXOffset + 20;
+
+        final int logoLowerBackgroundYOffset = logoYOffset + 20;
+
+        final int logoBackgroundWidthHeight = 20;
+
+        final int logoInnerWidthHeight = 12;
+
+        final int logoInnerShortXOffset = logoXOffset + 5;
+
+        final int logoInnerShortYOffset = logoYOffset + 5;
+
+        final int logoInnerLongXOffset = logoXOffset + 22;
+
+        final int logoInnerLongYOffset = logoYOffset + 22;
+
+        graphics.setColor(getColorFromPallet("Accent"));
+
+        graphics.fillRoundRect(
+            logoXOffset,
+            logoYOffset,
+            logoWidthHeight,
+            logoWidthHeight,
+            logoRadius,
+            logoRadius
+        );
+
+        graphics.fillRect(
+            logoXOffset,
+            logoLowerBackgroundYOffset,
+            logoWidthHeight,
+            logoBackgroundWidthHeight
+        );
+
+        graphics.fillRect(
+            logoRightBackgroundXOffset,
+            logoYOffset,
+            logoBackgroundWidthHeight,
+            logoWidthHeight
+        );
+
+        graphics.setColor(getColorFromPallet("Highlight"));
+
+        graphics.fillOval(
+            logoInnerShortXOffset,
+            logoInnerShortYOffset,
+            logoInnerWidthHeight,
+            logoInnerWidthHeight
+        );
+
+        graphics.fillRect(
+            logoInnerLongXOffset,
+            logoInnerShortYOffset,
+            logoInnerWidthHeight,
+            logoInnerWidthHeight
+        );
+
+        graphics.fillRect(
+            logoInnerShortXOffset,
+            logoInnerLongYOffset,
+            logoInnerWidthHeight,
+            logoInnerWidthHeight
+        );
+
+        graphics.fillRect(
+            logoInnerLongXOffset,
+            logoInnerLongYOffset,
+            logoInnerWidthHeight,
+            logoInnerWidthHeight
+        );
 
         graphics.setColor(getColorFromPallet("Highlight"));
 
@@ -138,7 +224,7 @@ class BusinessCard extends JPanel {
             Font.BOLD
         ));
 
-        graphics.drawString("BEN PAYNE", headerTextXOffset, headerTextYOffset);
+        graphics.drawString("BEN PAYNE", logoTextXOffset, logoTextYOffset);
 
         graphics.setFont(getFontResource(
             graphics,
@@ -147,7 +233,7 @@ class BusinessCard extends JPanel {
             Font.PLAIN
         ));
 
-        graphics.drawString("Web Developer", headerTextXOffset, headerTextLowerThirdYOffset);
+        graphics.drawString("Web Developer", logoTextXOffset, headerTextLowerThirdYOffset);
     }
 
     private void drawBody(final Graphics graphics) {
