@@ -185,7 +185,7 @@ class BusinessCard extends JPanel {
             logoWidthHeight
         );
 
-        graphics.setColor(getColorFromPallet("Highlight"));
+        graphics.setColor(getColorFromPallet("Contrast"));
 
         graphics.fillOval(
             logoInnerShortXOffset,
@@ -215,7 +215,7 @@ class BusinessCard extends JPanel {
             logoInnerWidthHeight
         );
 
-        graphics.setColor(getColorFromPallet("Highlight"));
+        graphics.setColor(getColorFromPallet("Contrast"));
 
         graphics.setFont(getFontResource(
             graphics,
@@ -241,7 +241,7 @@ class BusinessCard extends JPanel {
 
         final int bodyYOffset = Y_OFFSET + 210;
 
-        graphics.setColor(getColorFromPallet("Highlight"));
+        graphics.setColor(getColorFromPallet("Contrast"));
 
         graphics.fillRect(
             X_OFFSET,
@@ -438,9 +438,7 @@ class BusinessCard extends JPanel {
     private void setColorPallet() {
         colorPallet.put("Base", "#333333");
 
-        colorPallet.put("Highlight", "#FFFFFF");
-
-        colorPallet.put("Accent", "#F94B44");
+        colorPallet.put("Contrast", "#FFFFFF")oolorPallet.put("Accent", "#F94B44");
 
         colorPallet.put("Trim", "#AA373A");
 
