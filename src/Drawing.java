@@ -438,7 +438,9 @@ class BusinessCard extends JPanel {
     private void setColorPallet() {
         colorPallet.put("Base", "#333333");
 
-        colorPallet.put("Contrast", "#FFFFFF")oolorPallet.put("Accent", "#F94B44");
+        colorPallet.put("Contrast", "#FFFFFF");
+
+        colorPallet.put("Accent", "#F94B44");
 
         colorPallet.put("Trim", "#AA373A");
 
