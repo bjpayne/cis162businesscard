@@ -23,13 +23,13 @@ class BusinessCard extends JPanel {
 
     private static final int LARGE_FONT_SIZE = 20;
 
-    private static final int NEW_FONT_SIZE = 24;
+    private static final float ICON_FONT_SIZE = 24f;
 
     private static final int X_OFFSET = 75;
 
     private static final int Y_OFFSET = 40;
 
-    private static final String FONT_FAMILY = "sanserif";
+    private static final String FONT_FAMILY = "quicksand.ttf";
 
     private static final String IMAGE_RESOURCES = "/resources/images";
 
@@ -50,6 +50,13 @@ class BusinessCard extends JPanel {
     @Override
     public void paintComponent(final Graphics graphics) {
         super.paintComponent(graphics);
+
+        Graphics2D graphics2D = (Graphics2D) graphics;
+
+        graphics2D.setRenderingHint(
+            RenderingHints.KEY_TEXT_ANTIALIASING,
+            RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+        );
 
         setColorPallet();
 
@@ -85,6 +92,12 @@ class BusinessCard extends JPanel {
             IMAGE_RESOURCES + "/headerBg.jpg"
         );
 
+        BufferedImage profile = getImageResource(
+            graphics,
+            IMAGE_RESOURCES + "/profile.png"
+        );
+
+
         graphics.drawImage(
             background,
             X_OFFSET,
@@ -92,21 +105,49 @@ class BusinessCard extends JPanel {
             null
         );
 
-        final int headerTextXOffset = 20;
+        final int headerProfileXOffset = X_OFFSET + 20;
+        final int headerProfileYOffset = Y_OFFSET + 20;
+        final int headerProfileWidth = 100;
+        final int headerProfileHeight = 100;
+
+        Image scaledProfile = profile.getScaledInstance(
+            headerProfileWidth,
+            headerProfileHeight,
+            Image.SCALE_AREA_AVERAGING
+        );
+
+        graphics.drawImage(
+            scaledProfile,
+            headerProfileXOffset,
+            headerProfileYOffset,
+            null
+        );
+
+        final int headerTextXOffset = X_OFFSET + 20;
 
         final int headerTextYOffset = Y_OFFSET + 150;
 
-        final int headerThirdTextYOffset = headerTextYOffset + 20;
+        final int headerTextLowerThirdYOffset = headerTextYOffset + 20;
 
         graphics.setColor(getColorFromPallet("Highlight"));
 
-        graphics.setFont(new Font(FONT_FAMILY, Font.BOLD, LARGE_FONT_SIZE));
+        graphics.setFont(getFontResource(
+            graphics,
+            FONT_FAMILY,
+            LARGE_FONT_SIZE,
+            Font.BOLD
+        ));
 
-        graphics.drawString("BEN PAYNE", X_OFFSET + headerTextXOffset, headerTextYOffset);
+        graphics.drawString("BEN PAYNE", headerTextXOffset, headerTextYOffset);
 
-        graphics.setFont(new Font(FONT_FAMILY, Font.PLAIN, LARGE_FONT_SIZE));
+        graphics.setFont(getFontResource(
+            graphics,
+            FONT_FAMILY,
+            LARGE_FONT_SIZE,
+            Font.PLAIN
+        ));
 
-        graphics.drawString("Web Developer", X_OFFSET + headerTextXOffset, headerThirdTextYOffset);
+        graphics.drawString("Web Developer", headerTextXOffset, headerTextLowerThirdYOffset);
     }
 
     private void drawBody(final Graphics graphics) {
@@ -133,7 +174,7 @@ class BusinessCard extends JPanel {
 
         final int contactDetailsYIncrement = 80;
 
-        final int quoteXOffset = 15;
+        final int quoteXOffset = 20;
 
         int contactDetailsYOffset = Y_OFFSET + 250;
 
@@ -146,7 +187,12 @@ class BusinessCard extends JPanel {
 
         graphics.setColor(getColorFromPallet("Text"));
 
-        graphics.setFont(new Font(FONT_FAMILY, Font.PLAIN, FONT_SIZE));
+        graphics.setFont(getFontResource(
+            graphics,
+            FONT_FAMILY,
+            FONT_SIZE,
+            Font.PLAIN
+        ));
 
         for (String contactDetail : contactDetails) {
             if (contactDetail.contains("\n")) {
@@ -205,7 +251,12 @@ class BusinessCard extends JPanel {
 
         graphics.setColor(getColorFromPallet("Text"));
 
-        graphics.setFont(new Font(FONT_FAMILY, Font.ITALIC, FONT_SIZE));
+        graphics.setFont(getFontResource(
+            graphics,
+            FONT_FAMILY,
+            FONT_SIZE,
+            Font.ITALIC
+        ));
 
         graphics.drawString(
             "\"ASCII stupid question, get a stupid ANSI\"",
@@ -215,8 +266,6 @@ class BusinessCard extends JPanel {
     }
 
     private void drawContactIcons(final Graphics graphics) {
-        Font font = getFontResource(graphics, "fontawesome-webfont.ttf");
-
         String[] contactIcons = {"\uf0e0", "\uf095", "\uf0ac", "\uf041"};
 
         final int contactIconXOffset = X_OFFSET + 30;
@@ -227,7 +276,12 @@ class BusinessCard extends JPanel {
 
         graphics.setColor(getColorFromPallet("Accent"));
 
-        graphics.setFont(font);
+        graphics.setFont(getFontResource(
+            graphics,
+            "fontawesome-webfont.ttf",
+            ICON_FONT_SIZE,
+            Font.PLAIN
+        ));
 
         for (String contactIcon : contactIcons) {
             graphics.drawString(contactIcon, contactIconXOffset, contactIconOffset);
@@ -264,17 +318,22 @@ class BusinessCard extends JPanel {
         return background;
     }
 
-    private Font getFontResource(final Graphics graphics, final String path) {
+    private Font getFontResource(
+        final Graphics graphics,
+        final String fontFamily,
+        final float fontSize,
+        final int fontType
+    ) {
         Font font = null;
 
         try {
             font = Font.createFont(
                 Font.TRUETYPE_FONT,
                 getClass().
-                    getResourceAsStream(FONT_RESOURCES + "/" + path)
+                    getResourceAsStream(FONT_RESOURCES + "/" + fontFamily)
             );
 
-            font = font.deriveFont(Font.PLAIN, NEW_FONT_SIZE);
+            font = font.deriveFont(fontType, fontSize);
         } catch (IOException | FontFormatException e) {
             graphics.setColor(Color.WHITE);
 
@@ -301,6 +360,10 @@ class BusinessCard extends JPanel {
     }
 
     private Color getColorFromPallet(final String pallet) {
-        return Color.decode(colorPallet.get(pallet));
+        Color color;
+
+        color = Color.decode(colorPallet.get(pallet));
+
+        return color;
     }
 }
