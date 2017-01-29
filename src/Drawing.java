@@ -178,13 +178,6 @@ class BusinessCard extends JPanel {
 
         int contactDetailsYOffset = Y_OFFSET + 250;
 
-        String[] contactDetails = {
-            "benj@minpayne.com",
-            "(616) 634-2033",
-            "www.bj-payne.com",
-            "1138 Orchard Ave SE\n Grand Rapids, MI 49506"
-        };
-
         graphics.setColor(getColorFromPallet("Text"));
 
         graphics.setFont(getFontResource(
@@ -194,8 +187,21 @@ class BusinessCard extends JPanel {
             Font.PLAIN
         ));
 
+        String[] contactDetails = {
+            "benj@minpayne.com",
+            "(616) 634-2033",
+            "www.bj-payne.com",
+            "1138 Orchard Ave SE" + System.lineSeparator() +
+            " Grand Rapids, MI 49506"
+        };
+
         for (String contactDetail : contactDetails) {
-            if (contactDetail.contains("\n")) {
+            /*
+             * If there is a line break in the contact detail then split the
+             * line break and and loop through the results using a smaller
+             * split Y offset increment.
+             */
+            if (contactDetail.contains(System.lineSeparator())) {
                 int splitYOffset = 0;
 
                 final int splitYOffsetIncrement = 20;
